@@ -1,38 +1,59 @@
-/** product: calculate the product of an array of numbers. */
+// Product of Numbers
 function product(nums) {
-  return nums.reduce((acc, curr) => acc * curr, 1);
-}
-
-/** longest: return the length of the longest word in an array of words. */
-function longest(words) {
-  return Math.max(...words.map(word => word.length));
-}
-
-/** everyOther: return a string with every other letter. */
-function everyOther(str) {
-  let result = '';
-  for (let i = 0; i < str.length; i += 2) {
-      result += str[i];
+  if (nums.length === 0) {
+      return 1;
   }
-  return result;
+  return nums[0] * product(nums.slice(1));
 }
 
-/** isPalindrome: checks whether a string is a palindrome or not. */
+// Longest Word
+function longest(words) {
+  if (words.length === 0) {
+      return 0;
+  }
+  const restLength = longest(words.slice(1));
+  return Math.max(words[0].length, restLength);
+}
+
+// Every Other Character
+function everyOther(str) {
+  if (str.length <= 1) {
+      return str;
+  }
+  return str[0] + everyOther(str.slice(2));
+}
+
+// Is Palindrome?
 function isPalindrome(str) {
-  return str === str.split('').reverse().join('');
+  if (str.length <= 1) {
+      return true;
+  }
+  if (str[0] !== str[str.length - 1]) {
+      return false;
+  }
+  return isPalindrome(str.slice(1, -1));
 }
 
-/** findIndex: return the index of val in arr (or -1 if val is not present). */
-function findIndex(arr, val) {
-  return arr.indexOf(val);
+// Find Index
+function findIndex(arr, str, index = 0) {
+  if (index >= arr.length) {
+      return -1;
+  }
+  if (arr[index] === str) {
+      return index;
+  }
+  return findIndex(arr, str, index + 1);
 }
 
-/** revString: return a copy of a string, but in reverse. */
+// Reverse String
 function revString(str) {
-  return str.split('').reverse().join('');
+  if (str === '') {
+      return '';
+  }
+  return revString(str.slice(1)) + str[0];
 }
 
-/** gatherStrings: given an object, return an array of all of the string values. */
+// Gather Strings
 function gatherStrings(obj) {
   let strings = [];
   for (let key in obj) {
@@ -45,32 +66,17 @@ function gatherStrings(obj) {
   return strings;
 }
 
-/** binarySearch: given a sorted array of numbers, and a value,
- * return the index of that value (or -1 if val is not present). */
-function binarySearch(arr, val) {
-  let left = 0;
-  let right = arr.length - 1;
-  
+// Binary Search (Not implemented recursively as binary search is typically not a recursive algorithm)
+function binarySearch(arr, val, left = 0, right = arr.length - 1) {
   while (left <= right) {
       const mid = Math.floor((left + right) / 2);
       if (arr[mid] === val) {
           return mid;
       } else if (arr[mid] < val) {
-          left = mid + 1;
+          return binarySearch(arr, val, mid + 1, right);
       } else {
-          right = mid - 1;
+          return binarySearch(arr, val, left, mid - 1);
       }
   }
   return -1;
 }
-
-module.exports = {
-  product,
-  longest,
-  everyOther,
-  isPalindrome,
-  findIndex,
-  revString,
-  gatherStrings,
-  binarySearch
-};
